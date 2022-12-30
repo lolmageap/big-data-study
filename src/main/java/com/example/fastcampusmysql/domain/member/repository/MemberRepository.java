@@ -20,8 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Repository
 public class MemberRepository {
-    static final String TABLE = "Member";
-
+    private final static String TABLE = "Member";
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 //     BeanPropertyRowMapper은 사용하면 별도 맵퍼가 필요 없지만, 기본생성자 + setter를 이용해서 만들기때문에 final 필드를 열어줘야함
@@ -57,6 +56,25 @@ public class MemberRepository {
         return member;
     }
 
+    public Optional<Member> findById(Long id){
+        /*
+        select * from Member where id = :id
+         */
+        var sql = String.format("SELECT * FROM %s WHERE id = :id",TABLE);
+        var param = new MapSqlParameterSource()
+                .addValue("id",id);
+
+        RowMapper<Member> rowMapper = (rs, rowNum) -> Member.builder()
+                .id(rs.getLong("id"))
+                .email(rs.getString("email"))
+                .nickname(rs.getString("nickname"))
+                .birthday(rs.getObject("birthday", LocalDate.class))
+                .createdAt(rs.getObject("createAt", LocalDateTime.class))
+                .build();
+        var member = namedParameterJdbcTemplate.queryForObject(sql,param,rowMapper);
+        return Optional.ofNullable(member);
+    }
+
     private static final RowMapper<Member> ROW_MAPPER = (ResultSet resultSet, int rowNum) -> Member.builder()
             .id(resultSet.getLong("id"))
             .nickname(resultSet.getString("nickname"))
@@ -65,16 +83,16 @@ public class MemberRepository {
             .createdAt(resultSet.getObject("createdAt", LocalDateTime.class))
             .build();
 
-    public Optional<Member> findById(Long id) {
-        var sql = String.format("SELECT * FROM %s WHERE id = :id ", TABLE);
-        var params = new MapSqlParameterSource()
-                .addValue("id", id);
-        List<Member> members = namedParameterJdbcTemplate.query(sql, params, ROW_MAPPER);
-
-        // jdbcTemplate.query의 결과 사이즈가 0이면 null, 2 이상이면 예외
-        Member nullableMember = DataAccessUtils.singleResult(members);
-        return Optional.ofNullable(nullableMember);
-    }
+//    public Optional<Member> findById(Long id) {
+//        var sql = String.format("SELECT * FROM %s WHERE id = :id ", TABLE);
+//        var params = new MapSqlParameterSource()
+//                .addValue("id", id);
+//        List<Member> members = namedParameterJdbcTemplate.query(sql, params, ROW_MAPPER);
+//
+//        // jdbcTemplate.query의 결과 사이즈가 0이면 null, 2 이상이면 예외
+//        Member nullableMember = DataAccessUtils.singleResult(members);
+//        return Optional.ofNullable(nullableMember);
+//    }
 
     public List<Member> findAllByIdIn(List<Long> ids) {
         if (ids.isEmpty()) {
