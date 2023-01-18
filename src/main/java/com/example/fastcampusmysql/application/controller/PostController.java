@@ -15,6 +15,7 @@ import com.example.fastcampusmysql.util.PageCursor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,10 +33,9 @@ public class PostController {
 
     final private CreatePostLikeUsacase createPostLikeUsacase;
 
-    @PostMapping("")
+    @PostMapping()
     public Long create(@RequestBody PostCommand command) {
-//        return postWriteService.create(command);
-        return createPostUsecase.execute(command);
+        return postWriteService.create(command);
     }
     
     @GetMapping("/daily-post-counts")
@@ -45,12 +45,11 @@ public class PostController {
 
 
     @GetMapping("/members/{memberId}")
-    public Page<PostDto> getPosts(
+    public Page<Post> getPosts(
             @PathVariable Long memberId,
-            @RequestParam Integer page,
-            @RequestParam Integer size
+            @RequestParam Pageable pageable
     ) {
-        return postReadService.getPostDtos(memberId, PageRequest.of(page, size));
+        return postReadService.getPost(memberId, pageable);
     }
 
     

@@ -7,8 +7,9 @@ import java.util.List;
 public class PageHelper {
 
     public static String orderBy(Sort sort) {
-        if (sort.isEmpty())
+        if (sort.isEmpty()){
             return "id DESC";
+        }
 
         List<Sort.Order> orders = sort.toList();
         var orderBys = orders

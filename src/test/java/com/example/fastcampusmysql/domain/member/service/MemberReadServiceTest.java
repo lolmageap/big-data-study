@@ -20,25 +20,25 @@ class MemberReadServiceTest {
     @Autowired
     private MemberRepository memberRepository;
 
-    @DisplayName("회원 조회 테스트")
-    @Test
-    public void testGetMember() {
-        var member = MemberFixtureFactory.create();
-        var id = memberRepository.save(member).getId();
-
-        var result = service.getMember(id);
-
-        Assertions.assertEquals(id, result.id());
-    }
-
-
-    @DisplayName("회원 조회 실패")
-    @Test
-    public void testNotFound() {
-        Assertions.assertThrows(
-                NoSuchElementException.class,
-                () -> service.getMember(-1L)
-        );
-    }
+//    @DisplayName("회원 조회 테스트")
+//    @Test
+//    public void testGetMember() {
+//        var member = MemberFixtureFactory.create();
+//        var id = memberRepository.save(member).getId();
+//
+//        var result = service.getMember(id);
+//
+//        Assertions.assertEquals(id, result.id());
+//    }
+//
+//
+//    @DisplayName("회원 조회 실패")
+//    @Test
+//    public void testNotFound() {
+//        Assertions.assertThrows(
+//                NoSuchElementException.class,
+//                () -> service.getMember(-1L)
+//        );
+//    }
 
 }

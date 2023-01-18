@@ -14,13 +14,13 @@ public class Timeline {
 
     final private Long postId;
 
-    final private LocalDateTime createdAt;
+    final private LocalDateTime createAt;
 
     @Builder
-    public Timeline(Long id, Long memberId, Long postId, LocalDateTime createdAt) {
+    public Timeline(Long id, Long memberId, Long postId, LocalDateTime createAt) {
         this.id = id;
         this.memberId = Objects.requireNonNull(memberId);
         this.postId = Objects.requireNonNull(postId);
-        this.createdAt = createdAt == null ? LocalDateTime.now() : createdAt;
+        this.createAt = createAt == null ? LocalDateTime.now() : createAt;
     }
 }

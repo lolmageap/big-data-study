@@ -11,6 +11,7 @@ import com.example.fastcampusmysql.util.PageCursor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,8 +20,17 @@ import java.util.List;
 @Service
 public class PostReadService {
     final private PostRepository postRepository;
-
     final private PostLikeRepository postLikeRepository;
+
+    public List<DailyPostCount> getDailyPostCounts(DailyPostCountRequest request) {
+        /*
+            반환값 -> 리스트 [작성일자 , 작성회원 , 작성게시물 갯수]
+            select createAt, memberId , count(id) from post
+            where memberId = :memberId and createDate between firstDate and lastDate
+            group by createAt , memberId
+         */
+        return postRepository.groupByCreateDate(request);
+    }
 
     public List<Post> getPosts(Long memberId) {
         return postRepository.findByMemberId(memberId);
@@ -45,21 +55,17 @@ public class PostReadService {
                 post.getId(),
                 post.getMemberId(),
                 post.getContents(),
-                post.getCreatedAt(),
+                post.getCreateAt(),
                 postLikeRepository.countByPostId(post.getId())
         );
     }
 
-    public List<DailyPostCount> getDailyPostCounts(DailyPostCountRequest request) {
-        return postRepository.groupByCreatedDate(request);
+    public Page<Post> getPost(Long memberId, Pageable pageable) {
+        return postRepository.findAllByMemberId(memberId, pageable);
     }
 
     public Page<PostDto> getPostDtos(Long memberId, PageRequest pageRequest) {
         return postRepository.findAllByMemberId(memberId, pageRequest).map(this::toDto);
-    }
-
-    public Page<Post> getPost(Long memberId, PageRequest pageRequest) {
-        return postRepository.findAllByMemberId(memberId, pageRequest);
     }
 
     public PageCursor<Post> getPosts(Long memberId, CursorRequest cursorRequest) {

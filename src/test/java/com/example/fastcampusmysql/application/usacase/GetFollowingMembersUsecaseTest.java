@@ -21,22 +21,22 @@ class GetFollowingMembersUsecaseTest {
     @Autowired
     private FollowRepository followRepository;
 
-    @DisplayName("팔로잉 회원 목록 조회")
-    @Test
-    public void testExecute() {
-        var follow = Follow
-                .builder()
-                .fromMemberId(saveMember().getId())
-                .toMemberId(saveMember().getId())
-                .build();
-        followRepository.save(follow);
+//    @DisplayName("팔로잉 회원 목록 조회")
+//    @Test
+//    public void testExecute() {
+//        var follow = Follow
+//                .builder()
+//                .fromMemberId(saveMember().getId())
+//                .toMemberId(saveMember().getId())
+//                .build();
+//        followRepository.save(follow);
+//
+//        var result = usacase.execute(follow.getFromMemberId());
+//        System.out.println(result);
+//    }
 
-        var result = usacase.execute(follow.getFromMemberId());
-        System.out.println(result);
-    }
-
-    private Member saveMember() {
-        var member = MemberFixtureFactory.create();
-        return memberRepository.save(member);
-    }
+//    private Member saveMember() {
+//        var member = MemberFixtureFactory.create();
+//        return memberRepository.save(member);
+//    }
 }

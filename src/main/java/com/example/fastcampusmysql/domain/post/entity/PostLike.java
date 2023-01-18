@@ -1,5 +1,6 @@
 package com.example.fastcampusmysql.domain.post.entity;
 
+import com.example.fastcampusmysql.domain.post.dto.PostDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,13 +15,14 @@ public class PostLike {
 
     final private Long postId;
 
-    final private LocalDateTime createdAt;
+    final private LocalDateTime createAt;
 
     @Builder
-    public PostLike(Long id, Long memberId, Long postId, LocalDateTime createdAt) {
+    public PostLike(Long id, Long memberId, Long postId, LocalDateTime createAt) {
         this.id = id;
         this.memberId = Objects.requireNonNull(memberId);
         this.postId = Objects.requireNonNull(postId);
-        this.createdAt = createdAt == null ? LocalDateTime.now() : createdAt;
+        this.createAt = createAt == null ? LocalDateTime.now() : createAt;
     }
+
 }

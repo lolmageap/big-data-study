@@ -48,11 +48,13 @@ public class MemberRepository {
                 .email(member.getEmail())
                 .nickname(member.getNickname())
                 .birthday(member.getBirthday())
-                .createdAt(member.getCreatedAt()).build();
+                .createAt(member.getCreateAt()).build();
     }
 
     private Member update(Member member){
-        // TODO : implemented
+        var sql = String.format("Update %s set email = :email, nickname = :nickname, birthday = :birthday where id = :id" , TABLE);
+        SqlParameterSource params = new BeanPropertySqlParameterSource(member);
+        namedParameterJdbcTemplate.update(sql, params);
         return member;
     }
 
@@ -69,7 +71,7 @@ public class MemberRepository {
                 .email(rs.getString("email"))
                 .nickname(rs.getString("nickname"))
                 .birthday(rs.getObject("birthday", LocalDate.class))
-                .createdAt(rs.getObject("createAt", LocalDateTime.class))
+                .createAt(rs.getObject("createAt", LocalDateTime.class))
                 .build();
         var member = namedParameterJdbcTemplate.queryForObject(sql,param,rowMapper);
         return Optional.ofNullable(member);
@@ -80,7 +82,7 @@ public class MemberRepository {
             .nickname(resultSet.getString("nickname"))
             .email(resultSet.getString("email"))
             .birthday(resultSet.getObject("birthday", LocalDate.class))
-            .createdAt(resultSet.getObject("createdAt", LocalDateTime.class))
+            .createAt(resultSet.getObject("createAt", LocalDateTime.class))
             .build();
 
 //    public Optional<Member> findById(Long id) {
@@ -120,10 +122,5 @@ public class MemberRepository {
 //                .build();
 //    }
 //
-//    private Member update(Member member) {
-//        var sql = String.format("UPDATE %s set email = :email, nickname = :nickname, birthday = :birthday WHERE id = :id", TABLE);
-//        SqlParameterSource params = new BeanPropertySqlParameterSource(member);
-//        namedParameterJdbcTemplate.update(sql, params);
-//        return member;
-//    }
+
 }

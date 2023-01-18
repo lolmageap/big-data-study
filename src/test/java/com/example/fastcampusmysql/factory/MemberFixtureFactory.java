@@ -11,13 +11,13 @@ import org.jeasy.random.randomizers.time.LocalDateRandomizer;
 import static org.jeasy.random.FieldPredicates.named;
 
 public class MemberFixtureFactory {
-
-    public static Member create() {
-        var parameter = new EasyRandomParameters()
-                .excludeField(named("id"))
-                .stringLengthRange(1, 10)
-                .randomize(Long.class, new LongRangeRandomizer(1L, 100L));
-        return new EasyRandom(parameter).nextObject(Member.class);
+    static public Member create(){
+        var param = new EasyRandomParameters();
+        return new EasyRandom(param).nextObject(Member.class);
+    }
+    static public Member create(Long seed){
+        var param = new EasyRandomParameters().seed(seed);
+        return new EasyRandom(param).nextObject(Member.class);
     }
 
     public static MemberDto createDto() {

@@ -16,6 +16,6 @@ public class CreatePostLikeUsacase {
     public void execute(Long postId, Long memberId) {
         var post = postReadService.getPost(postId);
         var member = memberReadService.getMember(memberId);
-        postLikeWriteService.create(post, member);
+//        postLikeWriteService.create(post, member);
     }
 }

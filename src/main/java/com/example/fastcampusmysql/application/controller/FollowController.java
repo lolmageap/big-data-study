@@ -18,11 +18,9 @@ public class FollowController {
     final private CreateFollowMemberUsecase createFollowMemberUsecase;
     final private GetFollowingMembersUsecase getFollowingMembersUsacase;
 
-    @Operation(summary = "팔로우 등록")
     @PostMapping("/{fromId}/{toId}")
-    public List<MemberDto> register(@PathVariable Long fromId, @PathVariable Long toId) {
+        public void register(@PathVariable Long fromId, @PathVariable Long toId) {
         createFollowMemberUsecase.execute(fromId, toId);
-        return getFollowingMembersUsacase.execute(fromId);
     }
 
     @Operation(summary = "팔로워 조회")
@@ -30,4 +28,5 @@ public class FollowController {
     public List<MemberDto> getFollowers(@PathVariable Long fromId) {
         return getFollowingMembersUsacase.execute(fromId);
     }
+
 }

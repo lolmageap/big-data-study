@@ -21,15 +21,15 @@ public class GetTimelinePostsUsecase {
 
     final private TimelineReadService timelineReadService;
 
-    public PageCursor<PostDto> execute(Long memberId, CursorRequest cursorRequest) {
-        var follows = followReadService.getFollowings(memberId);
-        var followerMemberIds = follows
-                .stream()
-                .map(Follow::getToMemberId)
-                .toList();
-
-        return postReadService.getPostDtos(followerMemberIds, cursorRequest);
-    }
+//    public PageCursor<PostDto> execute(Long memberId, CursorRequest cursorRequest) {
+//        var follows = followReadService.getFollowings(memberId);
+//        var followerMemberIds = follows
+//                .stream()
+//                .map(Follow::getToMemberId)
+//                .toList();
+//
+//        return postReadService.getPostDtos(followerMemberIds, cursorRequest);
+//    }
 
     public PageCursor<PostDto> executeByTimeline(Long memberId, CursorRequest cursorRequest) {
         var pagedTimelines = timelineReadService.getTimelines(memberId, cursorRequest);

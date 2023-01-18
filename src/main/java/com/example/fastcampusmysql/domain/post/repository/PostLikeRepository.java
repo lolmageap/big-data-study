@@ -24,7 +24,7 @@ public class PostLikeRepository {
             .id(resultSet.getLong("id"))
             .memberId(resultSet.getLong("memberId"))
             .postId(resultSet.getLong("postId"))
-            .createdAt(resultSet.getObject("createdAt", LocalDateTime.class))
+            .createAt(resultSet.getObject("createAt", LocalDateTime.class))
             .build();
 
     public Long countByPostId(Long postId) {
@@ -58,7 +58,7 @@ public class PostLikeRepository {
                 .id(id)
                 .memberId(postLike.getMemberId())
                 .postId(postLike.getPostId())
-                .createdAt(postLike.getCreatedAt())
+                .createAt(postLike.getCreateAt())
                 .build();
     }
 

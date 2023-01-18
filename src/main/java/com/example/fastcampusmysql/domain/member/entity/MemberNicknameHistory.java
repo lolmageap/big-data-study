@@ -14,14 +14,14 @@ public class MemberNicknameHistory {
 
     final private String nickname;
 
-    final private LocalDateTime createdAt;
+    final private LocalDateTime createAt;
 
     @Builder
-    public MemberNicknameHistory(Long id, Long memberId, String nickname, LocalDateTime createdAt) {
+    public MemberNicknameHistory(Long id, Long memberId, String nickname, LocalDateTime createAt) {
         this.id = id;
         this.memberId = Objects.requireNonNull(memberId);
         this.nickname = Objects.requireNonNull(nickname);
 
-        this.createdAt = createdAt == null ? LocalDateTime.now() : createdAt;
+        this.createAt = createAt == null ? LocalDateTime.now() : createAt;
     }
 }

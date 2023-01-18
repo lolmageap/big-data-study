@@ -25,7 +25,7 @@ public class TimelineRepository {
             .id(resultSet.getLong("id"))
             .memberId(resultSet.getLong("memberId"))
             .postId(resultSet.getLong("postId"))
-            .createdAt(resultSet.getObject("createdAt", LocalDateTime.class))
+            .createAt(resultSet.getObject("createAt", LocalDateTime.class))
             .build();
 
     public List<Timeline> findAllByMemberIdAndOrderByIdDesc(Long memberId, int size) {
@@ -82,14 +82,14 @@ public class TimelineRepository {
                 .id(id)
                 .memberId(timeline.getMemberId())
                 .postId(timeline.getPostId())
-                .createdAt(timeline.getCreatedAt())
+                .createAt(timeline.getCreateAt())
                 .build();
     }
 
     public void bulkInsert(List<Timeline> timeline) {
         var sql = String.format("""
-                INSERT INTO `%s` (memberId, postId, createdAt)
-                VALUES (:memberId, :postId, :createdAt)
+                INSERT INTO `%s` (memberId, postId, createAt)
+                VALUES (:memberId, :postId, :createAt)
                 """, TABLE);
 
         SqlParameterSource[] params = timeline

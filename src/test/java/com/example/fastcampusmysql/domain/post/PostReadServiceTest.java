@@ -48,12 +48,12 @@ class PostReadServiceTest {
     @Test
     public void testPage() {
         PageRequest pageRequest = PageRequest.of(0, 10,
-                Sort.by("createdDate").descending()
+                Sort.by("createDate").descending()
                     .and(Sort.by("id").descending())
         );
         var result = postReadService.getPost(10L, pageRequest);
 
-        System.out.println(result.stream().map(it -> it.getCreatedDate().toString() + " " + it.getId()).toList());
+        System.out.println(result.stream().map(it -> it.getCreateDate().toString() + " " + it.getId()).toList());
     }
 
     @DisplayName("커서 페이징")
@@ -65,7 +65,7 @@ class PostReadServiceTest {
         System.out.println("Next Cusor: " + result.nextCursorRequest());
         System.out.println(result.body()
                 .stream()
-                .map(it -> it.getCreatedDate().toString() + " " + it.getId() + " "+ it.getContents())
+                .map(it -> it.getCreateDate().toString() + " " + it.getId() + " "+ it.getContents())
                 .toList()
         );
     }

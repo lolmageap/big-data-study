@@ -18,28 +18,14 @@ import java.util.List;
 @Repository
 public class FollowRepository {
     static final String TABLE = "follow";
-
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private static final RowMapper<Follow> ROW_MAPPER = (ResultSet resultSet, int rowNum) -> Follow.builder()
+    private static final RowMapper<Follow> row = (ResultSet resultSet, int rowNum) -> Follow.builder()
             .id(resultSet.getLong("id"))
             .fromMemberId(resultSet.getLong("fromMemberId"))
             .toMemberId(resultSet.getLong("toMemberId"))
-            .createdAt(resultSet.getObject("createdAt", LocalDateTime.class))
+            .createAt(resultSet.getObject("createAt", LocalDateTime.class))
             .build();
-
-    public List<Follow> findAllByFromMemberId(Long fromMemberId) {
-        var sql = String.format("SELECT * FROM %s WHERE fromMemberId = :fromMemberId", TABLE);
-        var params = new MapSqlParameterSource().addValue("fromMemberId", fromMemberId);
-        return namedParameterJdbcTemplate.query(sql, params, ROW_MAPPER);
-    }
-
-
-    public List<Follow> findAllByToMemberId(Long toMemberId) {
-        var sql = String.format("SELECT * FROM %s WHERE toMemberId = :toMemberId", TABLE);
-        var params = new MapSqlParameterSource().addValue("toMemberId", toMemberId);
-        return namedParameterJdbcTemplate.query(sql, params, ROW_MAPPER);
-    }
 
     public Follow save(Follow follow) {
         if (follow.getId() == null)
@@ -50,18 +36,29 @@ public class FollowRepository {
 
     private Follow insert(Follow follow) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(namedParameterJdbcTemplate.getJdbcTemplate())
-                .withTableName(TABLE)
-                .usingGeneratedKeyColumns("id");
+                    .withTableName(TABLE)
+                    .usingGeneratedKeyColumns("id");
 
         SqlParameterSource params = new BeanPropertySqlParameterSource(follow);
         var id = jdbcInsert.executeAndReturnKey(params).longValue();
-
         return Follow.builder()
                 .id(id)
                 .fromMemberId(follow.getFromMemberId())
                 .toMemberId(follow.getToMemberId())
-                .createdAt(follow.getCreatedAt())
+                .createAt(follow.getCreateAt())
                 .build();
+    }
+
+    public List<Follow> findAllByToMemberId(Long fromMemberId) {
+        var sql = String.format("SELECT * FROM %s WHERE fromMemberId = :fromMemberId",TABLE);
+        var params = new MapSqlParameterSource().addValue("fromMemberId", fromMemberId);
+        return namedParameterJdbcTemplate.query(sql ,params, row);
+    }
+
+    public List<Follow> findAllByFromMemberId(Long ids) {
+        var sql = String.format("SELECT * FROM %s WHERE id in  (:ids)" , TABLE);
+        var params = new MapSqlParameterSource().addValue("ids" , ids);
+        return namedParameterJdbcTemplate.query(sql, params, row);
     }
 
 }
